@@ -76,7 +76,7 @@ def generate_base_parser():
            f"\t\t\tself.add_info['input_shape'] = result.shape\n" \
            f"\t\t\treturn result\n" \
            f"\t\telse:\n" \
-           f"\t\t\treturn np.asarray(int(filename))\n\n" \
+           f"\t\t\treturn np.asarray([0 if i != int(filename) else 1 for i in range(3)])\n\n" \
            f"\tdef file_data_transform(self, file):\n" \
            f"\t\tfile = ImageOps.grayscale(file)\n" \
            f"\t\tresult = np.expand_dims(np.asarray(file), -1)\n" \
@@ -85,7 +85,7 @@ def generate_base_parser():
            f"\t\tmax_value = np.max(data)\n" \
            f"\t\treturn data / max_value\n\n" \
            f"\tdef output_transformer(self, data: np.ndarray) -> np.ndarray:\n" \
-           f"\t\treturn np.argmax(data, axis=1)\n\n" \
+           f"\t\treturn data\n\n" \
            f"\tdef one_file_parse(self, filename: str) -> (np.ndarray, np.ndarray):\n" \
            f"\t\tinput_data = []\n" \
            f"\t\toutput_data = []\n" \
@@ -136,12 +136,13 @@ def generate_base_functions():
 
     test_data = f"def test_model():\n" \
                 f"\tmodel = prepare_model()\n" \
-                f"\tmodel.load_model(model_name=os.path.join(KERAS_DIR, ARGS.model))\n" \
+                f"\tif not ARGS.raw_model:\n" \
+                f"\t\tmodel.load_model(model_name=os.path.join(KERAS_DIR, ARGS.model))\n" \
                 f"\tmodel.test()\n\n"
 
     train_data = f"def train_model():\n" \
                  f"\tmodel = prepare_model()\n" \
-                 f"\tif ARGS.train_model:\n" \
+                 f"\tif not ARGS.raw_model:\n" \
                  f"\t\tmodel.load_model(model_name=os.path.join(KERAS_DIR, ARGS.model))\n\n" \
                  f"\tbatch_size = ARGS.batch_size\n" \
                  f"\tepochs = ARGS.epochs\n\n" \
@@ -153,7 +154,7 @@ def generate_base_functions():
     predict_data = f"def prediction_test():\n" \
                    f"\tmodel = prepare_model()\n" \
                    f"\tif not ARGS.raw_model:\n" \
-                   f"\t\tmodel.load_model(model_name=os.path.join(KERAS_DIR, ARGS.filename))\n\n" \
+                   f"\t\tmodel.load_model(model_name=os.path.join(KERAS_DIR, ARGS.model))\n\n" \
                    f"\tpred_data, real_data = get_predict_data()\n" \
                    f"\tmodel.predict(pred_data, Y=real_data)\n\n" \
                    f"\tif ARGS.save_predict:\n" \
@@ -167,9 +168,28 @@ def generate_base_functions():
                "\treturn pred_data, real_data\n\n"
 
     prepare_dataset = "def prepare_dataset():\n" \
-                      "\tpass\n\n"
+                      "\tfrom PIL import Image\n" \
+                      "\tfrom random import randint\n" \
+                      "\twith open(os.path.join(DATASETS_DIR, ARGS.dataset, 'info.txt'), 'w') as info:\n" \
+                      "\t\tfor i in range(100):\n" \
+                      "\t\t\timage = Image.new(mode='L', size=(100, 100))\n" \
+                      "\t\t\tfor j in range(100):\n" \
+                      "\t\t\t\tfor k in range(100):\n" \
+                      "\t\t\t\t\timage.putpixel((j, k), value=randint(0, 255))\n" \
+                      "\t\t\timage_path = os.path.join(DATASETS_DIR, ARGS.dataset, 'input', f'{i}.png')\n" \
+                      "\t\t\timage.save(image_path)\n" \
+                      "\t\t\tinfo.write(f'{image_path} {randint(0, 3)}\\n')\n\n"
 
-    return prepare_data+test_data+train_data+predict_data+get_data+prepare_dataset
+    test_dataset = "def test_dataset():\n" \
+                   "\tdataset_dir = os.path.join(DATASETS_DIR, ARGS.dataset)\n" \
+                   "\tinfo_name = 'info.txt'\n" \
+                   f"\tdataset = {ARGS.filename.title()}Dataset(dir_name=dataset_dir, filename=os.path.join(dataset_dir, info_name), shuffle_data=True, per_for_test=15)\n" \
+                   f"\tparser = {ARGS.filename.title()}Parser()\n" \
+                   "\tdataset.set_parser(parser)\n" \
+                   "\tdataset.load_dataset()\n" \
+                   "\tdataset.show_data()\n\n"
+
+    return prepare_data+test_data+train_data+predict_data+get_data+prepare_dataset+test_dataset
 
 
 def generate_main_function():
@@ -188,6 +208,8 @@ def generate_main_function():
 
 def generate_start_data():
     start_data = "if __name__ == '__main__':\n" \
+                 "\t# prepare_dataset()\n" \
+                 "\t# test_dataset()\n" \
                  "\tmain()\n\n"
 
     return start_data
@@ -206,7 +228,7 @@ def generate_file():
 
     file_data = "".join(base_data)
 
-    filename = os.path.join(MODELS_DIR, ARGS.filename)
+    filename = os.path.join(MODELS_DIR, ARGS.filename.lower())
     with open(f"{filename}.py", "w") as file:
         file.write(file_data)
 
