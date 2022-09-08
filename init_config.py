@@ -8,7 +8,8 @@ if __name__ == "__main__":
         MODELS_FOLDER,
         KERAS_FOLDER,
         ONNX_FOLDER,
-        PREDICTION_FOLDER
+        PREDICTION_FOLDER,
+        "tests"
     ]
 
     for folder in folders:
@@ -16,3 +17,6 @@ if __name__ == "__main__":
             os.mkdir(folder)
         except OSError:
             print(f"{folder} already exists")
+
+    open("tests/datatest.py", 'w').close()
+
