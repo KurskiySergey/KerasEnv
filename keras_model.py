@@ -24,7 +24,7 @@ class Model(ABC):
     def load_dataset(self):
         self.dataset.load_dataset()
         self.testX, self.testY = self.dataset.get_test_data()
-        self.trainX, self.trainY = self.dataset.get_test_data()
+        self.trainX, self.trainY = self.dataset.get_train_data()
 
     def set_dataset(self, dataset: Dataset):
         self.dataset = dataset
@@ -54,6 +54,8 @@ class Model(ABC):
         custom_callback = KerasCallback(model_to_save=self)
         if isinstance(self.model, keras.Model):
             print("training model_efficientnet ...")
+            print(f"batch-size = {batch_size}, epochs = {epochs}")
+            print(f"train X len = {len(self.trainX)} test X len = {len(self.testX)}")
             self.model.fit(self.trainX, self.trainY,
                            batch_size=batch_size,
                            epochs=epochs,
