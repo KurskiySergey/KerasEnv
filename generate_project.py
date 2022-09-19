@@ -210,6 +210,8 @@ def generate_start_data():
     start_data = "if __name__ == '__main__':\n" \
                  "\t# prepare_dataset()\n" \
                  "\t# test_dataset()\n" \
+                 "\tif ARGS.no_cuda:\n" \
+                 "\t\tuse_cpu()\n" \
                  "\tmain()\n\n"
 
     return start_data
