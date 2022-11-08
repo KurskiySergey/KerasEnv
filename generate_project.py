@@ -138,7 +138,8 @@ def generate_base_functions():
                 f"\tmodel = prepare_model()\n" \
                 f"\tif not ARGS.raw_model:\n" \
                 f"\t\tmodel.load_model(model_name=os.path.join(KERAS_DIR, ARGS.model))\n" \
-                f"\tmodel.test()\n\n"
+                f"\tmodel.test()\n" \
+                f"\treturn model\n\n"
 
     train_data = f"def train_model():\n" \
                  f"\tmodel = prepare_model()\n" \
@@ -149,7 +150,8 @@ def generate_base_functions():
                  f"\tmodel.train(batch_size=batch_size, epochs=epochs)\n" \
                  f"\tmodel.test()\n\n" \
                  f"\tif ARGS.save_model:\n" \
-                 f"\t\tmodel.save_model(os.path.join(KERAS_DIR, ARGS.filename))\n\n"
+                 f"\t\tmodel.save_model(os.path.join(KERAS_DIR, ARGS.filename))\n" \
+                 f"\treturn model\n\n"
 
     predict_data = f"def prediction_test():\n" \
                    f"\tmodel = prepare_model()\n" \
