@@ -12,6 +12,7 @@ class Model(ABC):
         self.testX, self.testY = None, None
         self.trainX, self.trainY = None, None
         self.prediction = None
+        self.history = None
 
     @abstractmethod
     def create_model(self):
@@ -56,11 +57,11 @@ class Model(ABC):
             print("training model_efficientnet ...")
             print(f"batch-size = {batch_size}, epochs = {epochs}")
             print(f"train X len = {len(self.trainX)} test X len = {len(self.testX)}")
-            self.model.fit(self.trainX, self.trainY,
-                           batch_size=batch_size,
-                           epochs=epochs,
-                           callbacks=[custom_callback],
-                           **kwargs)
+            self.history = self.model.fit(self.trainX, self.trainY,
+                                          batch_size=batch_size,
+                                          epochs=epochs,
+                                          callbacks=[custom_callback],
+                                          **kwargs)
             print("done")
         else:
             print("can`t start training. Model is not set")
