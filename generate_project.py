@@ -147,7 +147,7 @@ def generate_base_functions():
                  f"\t\tmodel.load_model(model_name=os.path.join(KERAS_DIR, ARGS.model))\n\n" \
                  f"\tbatch_size = ARGS.batch_size\n" \
                  f"\tepochs = ARGS.epochs\n\n" \
-                 f"\tmodel.train(batch_size=batch_size, epochs=epochs)\n" \
+                 f"\tmodel.train(batch_size=batch_size, epochs=epochs, no_callback=ARGS.no_callback, callback=ARGS.callback)\n" \
                  f"\tmodel.test()\n\n" \
                  f"\tif ARGS.save_model:\n" \
                  f"\t\tmodel.save_model(os.path.join(KERAS_DIR, ARGS.filename))\n" \

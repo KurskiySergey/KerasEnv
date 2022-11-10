@@ -52,7 +52,12 @@ class Model(ABC):
         print("done")
 
     def train(self, batch_size=128, epochs=15, **kwargs):
-        custom_callback = KerasCallback(model_to_save=self)
+        use_callback = kwargs.get('no_callback')
+        callback_path = kwargs.get('callback')
+        if use_callback is None or use_callback:
+            custom_callback = KerasCallback(model_to_save=self, use_callback=True, filepath=callback_path)
+        else:
+            custom_callback = KerasCallback(model_to_save=self, use_callback=False, filepath=callback_path)
         if isinstance(self.model, keras.Model):
             print("training model_efficientnet ...")
             print(f"batch-size = {batch_size}, epochs = {epochs}")

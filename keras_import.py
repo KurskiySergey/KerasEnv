@@ -18,6 +18,8 @@ PARSER.add_argument("--save-predict", action="store_true", default=False)
 PARSER.add_argument("--train-model", action="store_true", default=False)
 PARSER.add_argument("--model", "-m", type=str, default="sd_test")
 PARSER.add_argument("--dataset", "-d", type=str, default="train")
+PARSER.add_argument("--no-callback", action='store_true', default=False)
+PARSER.add_argument('--callback', type=str, default='callback_model')
 ARGS = PARSER.parse_args()
 
 
