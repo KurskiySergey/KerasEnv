@@ -191,7 +191,11 @@ def generate_base_functions():
                    "\tdataset.load_dataset()\n" \
                    "\tdataset.show_data()\n\n"
 
-    return prepare_data+test_data+train_data+predict_data+get_data+prepare_dataset+test_dataset
+    show_model = 'def show_model():\n' \
+                 '\tmodel = prepare_model()\n' \
+                 '\tprint(model.model.summary()))\n\n'
+
+    return prepare_data+test_data+train_data+predict_data+get_data+prepare_dataset+test_dataset+show_model
 
 
 def generate_main_function():
@@ -210,10 +214,11 @@ def generate_main_function():
 
 def generate_start_data():
     start_data = "if __name__ == '__main__':\n" \
-                 "\t# prepare_dataset()\n" \
-                 "\t# test_dataset()\n" \
                  "\tif ARGS.no_cuda:\n" \
                  "\t\tuse_cpu()\n" \
+                 "\t# prepare_dataset()\n" \
+                 "\t# show_model()\n" \
+                 "\t# test_dataset()\n" \
                  "\tmain()\n\n"
 
     return start_data
