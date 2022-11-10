@@ -57,9 +57,9 @@ class Model(ABC):
         kwargs.pop('no_callback')
         kwargs.pop('callback')
         if use_callback:
-            custom_callback = KerasCallback(model_to_save=self, use_callback=True, filepath=callback_path)
-        else:
             custom_callback = KerasCallback(model_to_save=self, use_callback=False, filepath=callback_path)
+        else:
+            custom_callback = KerasCallback(model_to_save=self, use_callback=True, filepath=callback_path)
         if isinstance(self.model, keras.Model):
             print("training model_efficientnet ...")
             print(f"batch-size = {batch_size}, epochs = {epochs}")
