@@ -54,7 +54,9 @@ class Model(ABC):
     def train(self, batch_size=128, epochs=15, **kwargs):
         use_callback = kwargs.get('no_callback')
         callback_path = kwargs.get('callback')
-        if use_callback is None or use_callback:
+        kwargs.pop('no_callback')
+        kwargs.pop('callback')
+        if use_callback:
             custom_callback = KerasCallback(model_to_save=self, use_callback=True, filepath=callback_path)
         else:
             custom_callback = KerasCallback(model_to_save=self, use_callback=False, filepath=callback_path)
