@@ -193,7 +193,7 @@ def generate_base_functions():
 
     show_model = 'def show_model():\n' \
                  '\tmodel = prepare_model()\n' \
-                 '\tprint(model.model.summary()))\n\n'
+                 '\tprint(model.model.summary())\n\n'
 
     return prepare_data+test_data+train_data+predict_data+get_data+prepare_dataset+test_dataset+show_model
 
