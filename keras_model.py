@@ -64,11 +64,17 @@ class Model(ABC):
             print("training model_efficientnet ...")
             print(f"batch-size = {batch_size}, epochs = {epochs}")
             print(f"train X len = {len(self.trainX)} test X len = {len(self.testX)}")
-            self.history = self.model.fit(self.trainX, self.trainY,
-                                          batch_size=batch_size,
-                                          epochs=epochs,
-                                          callbacks=[custom_callback],
-                                          **kwargs)
+            if self.trainY is None:
+                self.history = self.model.fit(self.trainX,
+                                              epochs=epochs,
+                                              callbacks=[custom_callback],
+                                              **kwargs)
+            else:
+                self.history = self.model.fit(self.trainX, self.trainY,
+                                              batch_size=batch_size,
+                                              epochs=epochs,
+                                              callbacks=[custom_callback],
+                                              **kwargs)
             print("done")
         else:
             print("can`t start training. Model is not set")
