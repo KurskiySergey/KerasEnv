@@ -1,5 +1,5 @@
 import numpy
-from keras.callbacks import Callback, ModelCheckpoint
+from keras.callbacks import Callback, ModelCheckpoint, LearningRateScheduler
 from config import KERAS_DIR
 import os
 
@@ -11,6 +11,7 @@ model_checkpoint = ModelCheckpoint(
     save_best_only=True
 )
 
+EPOCH_STEP = 1000
 
 class KerasCallback(Callback):
 
@@ -30,3 +31,13 @@ class KerasCallback(Callback):
                 self.loss = logs.get("loss")
                 print()
                 self.model_to_save.save_model(self.filepath)
+
+
+def scheduler(epoch, lr):
+    updated_lr = lr
+    if epoch+1 - ((epoch + 1) // EPOCH_STEP) * EPOCH_STEP == 0:
+        updated_lr /= 10
+    print(f"lr scheduler epoch {epoch}: {updated_lr}")
+    return updated_lr
+
+

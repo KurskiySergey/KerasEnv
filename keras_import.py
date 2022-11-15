@@ -20,7 +20,7 @@ PARSER.add_argument("--model", "-m", type=str, default="sd_test")
 PARSER.add_argument("--dataset", "-d", type=str, default="train")
 PARSER.add_argument("--no-callback", action='store_true', default=False)
 PARSER.add_argument('--callback', type=str, default='callback_model')
-PARSER.add_argument('--learning-rate', "-lr", type=int, default=0.001)
+PARSER.add_argument('--learning-rate', "-lr", type=float, default=0.001)
 ARGS = PARSER.parse_args()
 
 
