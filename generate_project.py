@@ -122,7 +122,7 @@ def generate_base_functions():
                    f"Dataset(dir_name=os.path.join(DATASETS_DIR, ARGS.dataset))\n" \
                    f"\t{ARGS.filename.lower()}_parser = {ARGS.filename.title()}Parser()\n" \
                    f"\t{ARGS.filename.lower()}_model = {ARGS.filename.title()}Model()\n\n" \
-                   f"\tcustom_callback = KerasCallback(model_to_save={ARGS.filename.lower()}_model.model, filepath=ARGS.callback)\n" \
+                   f"\tcustom_callback = KerasCallback(model_to_save={ARGS.filename.lower()}_model, filepath=ARGS.callback)\n" \
                    f"\tcallbacks = [custom_callback]\n" \
                    f"{ARGS.filename.lower()}_model.callbacks = callbacks\n\n" \
                    f"\t{ARGS.filename.lower()}_dataset.set_parser({ARGS.filename.lower()}_parser)\n" \
@@ -151,7 +151,7 @@ def generate_base_functions():
                  f"\t\tmodel.load_model(model_name=os.path.join(KERAS_DIR, ARGS.model))\n\n" \
                  f"\tbatch_size = ARGS.batch_size\n" \
                  f"\tepochs = ARGS.epochs\n\n" \
-                 f"\tmodel.train(batch_size=batch_size, epochs=epochs, no_callback=ARGS.no_callback, callback=ARGS.callback)\n" \
+                 f"\tmodel.train(batch_size=batch_size, epochs=epochs, no_callback=ARGS.no_callback)\n" \
                  f"\tmodel.test()\n\n" \
                  f"\tif ARGS.save_model:\n" \
                  f"\t\tmodel.save_model(os.path.join(KERAS_DIR, ARGS.filename))\n" \
