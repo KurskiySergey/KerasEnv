@@ -1,6 +1,5 @@
 import keras
 from datasets import Dataset
-from callbacks import KerasCallback, model_checkpoint
 from abc import ABC, abstractmethod
 import numpy as np
 
@@ -13,6 +12,7 @@ class Model(ABC):
         self.trainX, self.trainY = None, None
         self.prediction = None
         self.history = None
+        self.callbacks = []
 
     @abstractmethod
     def create_model(self):
@@ -52,14 +52,14 @@ class Model(ABC):
         print("done")
 
     def train(self, batch_size=128, epochs=15, **kwargs):
-        use_callback = kwargs.get('no_callback')
-        callback_path = kwargs.get('callback')
+        no_callback = kwargs.get('no_callback')
         kwargs.pop('no_callback')
-        kwargs.pop('callback')
-        if use_callback:
-            custom_callback = KerasCallback(model_to_save=self, use_callback=False, filepath=callback_path)
+
+        if no_callback:
+            callbacks = []
         else:
-            custom_callback = KerasCallback(model_to_save=self, use_callback=True, filepath=callback_path)
+            callbacks = self.callbacks
+
         if isinstance(self.model, keras.Model):
             print("training model_efficientnet ...")
             print(f"batch-size = {batch_size}, epochs = {epochs}")
@@ -67,13 +67,13 @@ class Model(ABC):
             if self.trainY is None:
                 self.history = self.model.fit(self.trainX,
                                               epochs=epochs,
-                                              callbacks=[custom_callback],
+                                              callbacks=callbacks,
                                               **kwargs)
             else:
                 self.history = self.model.fit(self.trainX, self.trainY,
                                               batch_size=batch_size,
                                               epochs=epochs,
-                                              callbacks=[custom_callback],
+                                              callbacks=callbacks,
                                               **kwargs)
             print("done")
         else:
