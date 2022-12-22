@@ -30,9 +30,9 @@ class Model(ABC):
     def set_dataset(self, dataset: Dataset):
         self.dataset = dataset
 
-    def load_model(self, model_name):
+    def load_model(self, model_name, custom_objects=None):
         print(f"loading model_efficientnet from {model_name}...")
-        self.model = keras.models.load_model(model_name)
+        self.model = keras.models.load_model(model_name, custom_objects=custom_objects)
         print("done")
         print(self.model)
 

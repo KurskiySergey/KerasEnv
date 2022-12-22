@@ -11,7 +11,7 @@ model_checkpoint = ModelCheckpoint(
     save_best_only=True
 )
 
-EPOCH_STEP = 1000
+EPOCH_STEP = 16
 
 class KerasCallback(Callback):
 
