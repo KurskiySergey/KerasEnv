@@ -1,80 +1,88 @@
-absl-py==1.1.0
-aiohttp @ file:///tmp/build/80754af9/aiohttp_1646806365504/work
-aiosignal @ file:///tmp/build/80754af9/aiosignal_1637843061372/work
+absl-py==0.15.0
+aiohttp==3.8.3
+aiosignal==1.3.1
 astor==0.8.1
 astunparse==1.6.3
-async-timeout @ file:///tmp/build/80754af9/async-timeout_1637851218186/work
-attrs @ file:///opt/conda/conda-bld/attrs_1642510447205/work
+async-timeout==4.0.2
+attrs==22.2.0
 blinker==1.4
 brotlipy==0.7.0
-cachetools @ file:///tmp/build/80754af9/cachetools_1619597386817/work
-certifi @ file:///opt/conda/conda-bld/certifi_1655968806487/work/certifi
-cffi @ file:///opt/conda/conda-bld/cffi_1642701102775/work
-charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
-click @ file:///tmp/build/80754af9/click_1646056590078/work
-cryptography @ file:///tmp/build/80754af9/cryptography_1633520369886/work
+cachetools==4.2.4
+certifi==2022.12.7
+cffi==1.15.1
+charset-normalizer==2.1.1
+click==8.1.3
+cryptography==39.0.0
 cycler==0.11.0
-flatbuffers @ file:///home/ktietz/cip/python-flatbuffers_1634039120618/work
+dpcpp-cpp-rt==2023.0.0
+flatbuffers==1.12
 fonttools==4.33.3
-frozenlist @ file:///tmp/build/80754af9/frozenlist_1637767113340/work
-gast @ file:///Users/ktietz/demo/mc3/conda-bld/gast_1628588903283/work
+frozenlist==1.3.3
+gast==0.4.0
 gevent==21.12.0
-google-auth @ file:///opt/conda/conda-bld/google-auth_1646735974934/work
-google-auth-oauthlib @ file:///tmp/build/80754af9/google-auth-oauthlib_1617120569401/work
-google-pasta @ file:///Users/ktietz/demo/mc3/conda-bld/google-pasta_1630577991354/work
+google-auth==1.35.0
+google-auth-oauthlib==0.4.6
+google-pasta==0.2.0
 greenlet==1.1.2
-grpcio @ file:///tmp/build/80754af9/grpcio_1637590821884/work
+grpcio==1.34.1
 h5py==3.1.0
-idna @ file:///tmp/build/80754af9/idna_1637925883363/work
-importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1648544546694/work
-Keras @ file:///Users/ktietz/demo/mc3/conda-bld/keras_split_1630579936814/work
+idna==3.4
+importlib-metadata==6.0.0
+intel-cmplr-lib-rt==2023.0.0
+intel-cmplr-lic-rt==2023.0.0
+intel-opencl-rt==2023.0.0
+intel-openmp==2023.0.0
+keras==2.7.0
 keras-nightly==2.5.0.dev2021032900
-Keras-Preprocessing @ file:///tmp/build/80754af9/keras-preprocessing_1612283640596/work
+Keras-Preprocessing==1.1.2
 kiwisolver==1.4.3
 libclang==14.0.1
-Markdown @ file:///tmp/build/80754af9/markdown_1614363852612/work
+Markdown==3.4.1
+MarkupSafe==2.1.2
 matplotlib==3.5.2
+mkl==2023.0.0
 mkl-fft==1.3.1
-mkl-random @ file:///tmp/build/80754af9/mkl_random_1626186066731/work
+mkl-random==1.2.2
 mkl-service==2.4.0
-multidict @ file:///opt/conda/conda-bld/multidict_1640703752579/work
-numpy==1.23.0
-oauthlib @ file:///opt/conda/conda-bld/oauthlib_1644332107998/work
+multidict==6.0.4
+numpy==1.19.5
+oauthlib==3.2.2
 onnx==1.12.0
 onnx2keras==0.0.24
-opt-einsum @ file:///tmp/build/80754af9/opt_einsum_1621500238896/work
+opt-einsum==3.3.0
 packaging==21.3
 Pillow==9.1.1
-protobuf==3.20.1
-pyasn1 @ file:///Users/ktietz/demo/mc3/conda-bld/pyasn1_1629708007385/work
+protobuf==3.19.0
+pyasn1==0.4.8
 pyasn1-modules==0.2.8
-pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
-PyJWT @ file:///tmp/build/80754af9/pyjwt_1619682484438/work
-pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1635333100036/work
+pycparser==2.21
+PyJWT==2.6.0
+pyOpenSSL==23.0.0
 pyparsing==3.0.9
-PySocks @ file:///tmp/build/80754af9/pysocks_1605305812635/work
+PySocks==1.7.1
 python-dateutil==2.8.2
 PyYAML==6.0
-requests @ file:///opt/conda/conda-bld/requests_1641824580448/work
+requests==2.28.2
 requests-oauthlib==1.3.0
-rsa @ file:///tmp/build/80754af9/rsa_1614366226499/work
-scipy @ file:///tmp/build/80754af9/scipy_1641555004408/work
-six @ file:///tmp/build/80754af9/six_1644875935023/work
-tensorboard==2.9.1
+rsa==4.9
+scipy==1.4.1
+six==1.15.0
+tbb==2021.8.0
+tensorboard==2.10.1
 tensorboard-data-server==0.6.1
-tensorboard-plugin-wit==1.6.0
-tensorflow @ file:///home/builder/ktietz/aggregate/tensorflow_recipes/ci_cpu/tensorflow-base_1614360980945/work/tensorflow_pkg/tensorflow-2.4.1-cp39-cp39-linux_x86_64.whl
-tensorflow-estimator==2.9.0
+tensorboard-plugin-wit==1.8.1
+tensorflow==2.7.0
+tensorflow-estimator==2.7.0
 tensorflow-io-gcs-filesystem==0.26.0
 termcolor==1.1.0
 tf-estimator-nightly==2.8.0.dev2021122109
-typing_extensions @ file:///opt/conda/conda-bld/typing_extensions_1647553014482/work
-urllib3 @ file:///opt/conda/conda-bld/urllib3_1650639997961/work
+typing-extensions==3.7.4.3
+urllib3==1.26.14
 websocket==0.2.1
 websockets==10.3
-Werkzeug @ file:///opt/conda/conda-bld/werkzeug_1645628268370/work
-wrapt @ file:///tmp/build/80754af9/wrapt_1638433857881/work
-yarl @ file:///tmp/build/80754af9/yarl_1606939947528/work
-zipp @ file:///opt/conda/conda-bld/zipp_1652341764480/work
+Werkzeug==2.2.2
+wrapt==1.12.1
+yarl==1.8.2
+zipp==3.11.0
 zope.event==4.5.0
 zope.interface==5.4.0
