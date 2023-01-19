@@ -9,7 +9,8 @@ if __name__ == "__main__":
         KERAS_FOLDER,
         ONNX_FOLDER,
         PREDICTION_FOLDER,
-        "tests"
+        "tests",
+        "utils"
     ]
 
     for folder in folders:
