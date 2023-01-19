@@ -124,7 +124,7 @@ def generate_base_functions():
                    f"\t{ARGS.filename.lower()}_model = {ARGS.filename.title()}Model()\n\n" \
                    f"\tcustom_callback = KerasCallback(model_to_save={ARGS.filename.lower()}_model, filepath=ARGS.callback)\n" \
                    f"\tcallbacks = [custom_callback]\n" \
-                   f"{ARGS.filename.lower()}_model.callbacks = callbacks\n\n" \
+                   f"\t{ARGS.filename.lower()}_model.callbacks = callbacks\n\n" \
                    f"\t{ARGS.filename.lower()}_dataset.set_parser({ARGS.filename.lower()}_parser)\n" \
                    f"\t{ARGS.filename.lower()}_model.set_dataset({ARGS.filename.lower()}_dataset)\n\n" \
                    f"\tif not ARGS.predict:\n" \
