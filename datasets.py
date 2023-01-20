@@ -5,7 +5,7 @@ from parsers import Parser, TestParser, MnistParser, SDTestParser
 
 
 class Dataset:
-    def __init__(self, filename: str = None, dir_name: str = None, per_for_test: int = 13, use_dataset=True, shuffle_data=False):
+    def __init__(self, filename: str = None, dir_name: str = None, per_for_test: int = 13, use_dataset=True, shuffle_data=False, batch_size=None):
         self.test_data: list = []
         self.train_data: list = []
         self.filename = filename
@@ -14,13 +14,18 @@ class Dataset:
         self.parser: Parser = None
         self.use_dataset = use_dataset
         self.shuffle_data = shuffle_data
+        self.batch_size = batch_size
+        self.train_samples = 0
+        self.test_samples = 0
 
-    def load_dataset(self):
+    def load_dataset(self, fit_generator=False, batch_size=10):
         if self.use_dataset:
-            if self.shuffle_data:
-                self.__load_shuffled_data()
-            else:
-                self.__load_origin_data()
+            if not fit_generator:
+                if self.shuffle_data:
+                    self.__load_shuffled_data()
+                else:
+                    self.__load_origin_data()
+        self.__get_samples()
 
     def show_data(self, per_of_data: float = 10):
         print(f"train input/output length: {len(self.train_data[0])}")
@@ -32,6 +37,11 @@ class Dataset:
 
     def set_parser(self, parser: Parser):
         self.parser = parser
+
+    def __get_samples(self):
+        if self.batch_size is not None:
+            self.test_samples = int(len(self.test_data[1]) / self.batch_size)
+            self.train_samples = int(len(self.train_data[1]) / self.batch_size)
 
     def __load_shuffled_data(self):
         if self.filename is None:
@@ -144,6 +154,9 @@ class Dataset:
         return self.train_data
 
     def get_test_data(self):
+        return self.test_data
+
+    def get_val_data(self):
         return self.test_data
 
 

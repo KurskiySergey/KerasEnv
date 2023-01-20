@@ -10,6 +10,7 @@ class Model(ABC):
         self.dataset: Dataset = None
         self.testX, self.testY = None, None
         self.trainX, self.trainY = None, None
+        self.valX, self.valY = None, None
         self.prediction = None
         self.history = None
         self.callbacks = []
@@ -26,6 +27,7 @@ class Model(ABC):
         self.dataset.load_dataset()
         self.testX, self.testY = self.dataset.get_test_data()
         self.trainX, self.trainY = self.dataset.get_train_data()
+        self.valX, self.valY = self.dataset.get_val_data()
 
     def set_dataset(self, dataset: Dataset):
         self.dataset = dataset
@@ -63,9 +65,13 @@ class Model(ABC):
         if isinstance(self.model, keras.Model):
             print("training model_efficientnet ...")
             print(f"batch-size = {batch_size}, epochs = {epochs}")
-            print(f"train X len = {len(self.trainX)} test X len = {len(self.testX)}")
+            try:
+                print(f"train X len = {len(self.trainX)} test X len = {len(self.testX)}")
+            except TypeError:
+                print(f"train X is generator")
             if self.trainY is None:
                 self.history = self.model.fit(self.trainX,
+                                              batch_size=batch_size,
                                               epochs=epochs,
                                               callbacks=callbacks,
                                               **kwargs)

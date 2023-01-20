@@ -189,7 +189,7 @@ def generate_base_functions():
     test_dataset = "def test_dataset():\n" \
                    "\tdataset_dir = os.path.join(DATASETS_DIR, ARGS.dataset)\n" \
                    "\tinfo_name = 'info.txt'\n" \
-                   f"\tdataset = {ARGS.filename.title()}Dataset(dir_name=dataset_dir, filename=os.path.join(dataset_dir, info_name), shuffle_data=True, per_for_test=15)\n" \
+                   f"\tdataset = {ARGS.filename.title()}Dataset(dir_name=dataset_dir, filename=os.path.join(dataset_dir, info_name), shuffle_data=True, per_for_test=15, batch_size=ARGS.batch_size)\n" \
                    f"\tparser = {ARGS.filename.title()}Parser()\n" \
                    "\tdataset.set_parser(parser)\n" \
                    "\tdataset.load_dataset()\n" \
