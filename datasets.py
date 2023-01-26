@@ -159,6 +159,16 @@ class Dataset:
     def get_val_data(self):
         return self.test_data
 
+    def test_train_generator(self, data, samples, bacth_size, one_use=False):
+        input_dt, output_dt = data
+        while True:
+            for index in range(samples):
+                in_dt = input_dt[index*bacth_size:(index+1)*bacth_size]
+                out_dt = output_dt[index*bacth_size:(index+1)*bacth_size]
+                yield in_dt, out_dt
+            if one_use:
+                break
+
 
 class TestDataset(Dataset):
     pass

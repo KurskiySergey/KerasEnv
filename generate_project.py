@@ -18,6 +18,7 @@ def generate_dataset():
         os.mkdir("input")
         os.mkdir("output")
         os.mkdir("raw_test")
+        os.mkdir("history")
 
         for dir_name in ["test", "train"]:
             os.mkdir(dir_name)
@@ -209,9 +210,19 @@ def generate_main_function():
                 "\t\tprediction_test()\n" \
                 "\telse:\n" \
                 "\t\tif ARGS.test:\n" \
-                "\t\t\ttest_model()\n" \
+                "\t\t\tmodel=test_model()\n" \
                 "\t\telse:\n" \
-                "\t\t\ttrain_model()\n\n"
+                "\t\t\tmodel=train_model()\n" \
+                "\n" \
+                "\t\tif ARGS.save_history:\n" \
+                "\t\t\tif ARGS.save_model:\n" \
+                "\t\t\t\thistory_name = ARGS.filename\n" \
+                "\t\t\telif ARGS.predict:\n" \
+                "\t\t\t\thistory_name = ARGS.model\n" \
+                "\t\t\telse:" \
+                "\t\t\t\thistory_name = ARGS.history\n" \
+                "\t\t\tmodel.save_history(file_name=os.path.join(DATASETS_DIR, ARGS.dataset, " \
+                "'history', history_name))\n\n"
 
     return main_data
 

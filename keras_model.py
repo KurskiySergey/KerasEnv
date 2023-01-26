@@ -1,3 +1,5 @@
+import json
+
 import keras
 from datasets import Dataset
 from abc import ABC, abstractmethod
@@ -41,6 +43,20 @@ class Model(ABC):
     def save_model(self, model_name):
         print(f"saving model_efficientnet to {model_name}")
         self.model.save(model_name)
+        print("done")
+
+    def save_history(self, file_name):
+        print(f"saving model history to {file_name}")
+        try:
+            with open(f"{file_name}_history.json", "w") as history:
+                model_history = self.history.history
+                lr_data = model_history.get("lr")
+                lr_data = [float(data) for data in lr_data]
+                model_history["lr"] = lr_data
+                json.dump(model_history, history)
+        except (json.JSONDecodeError, TypeError):
+            with open(f"{file_name}_history.txt", "w") as history:
+                history.write(str(self.history.history))
         print("done")
 
     def test(self):
