@@ -40,8 +40,13 @@ class Dataset:
 
     def __get_samples(self):
         if self.batch_size is not None:
-            self.test_samples = int(len(self.test_data[1]) / self.batch_size)
-            self.train_samples = int(len(self.train_data[1]) / self.batch_size)
+            self.test_samples = int(len(self.test_data[1]) // self.batch_size)
+            self.train_samples = int(len(self.train_data[1]) // self.batch_size)
+
+            if self.train_samples * self.batch_size != len(self.train_data[1]):
+                self.train_samples += 1
+            if self.test_samples * self.batch_size != len(self.test_data[1]):
+                self.test_samples += 1
 
     def __load_shuffled_data(self):
         if self.filename is None:
