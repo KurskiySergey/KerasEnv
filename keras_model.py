@@ -114,7 +114,7 @@ class Model(ABC):
                 print("Real output")
                 print(Y)
 
-            self.prediction = prediction
+        self.prediction = prediction
 
     def __repr__(self):
         print(self.model.summary())
