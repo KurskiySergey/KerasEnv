@@ -7,7 +7,7 @@ import numpy as np
 
 
 class Model(ABC):
-    def __init__(self):
+    def __init__(self, print_predict=True):
         self.model: keras.Model = None
         self.dataset: Dataset = None
         self.testX, self.testY = None, None
@@ -16,6 +16,7 @@ class Model(ABC):
         self.prediction = None
         self.history = None
         self.callbacks = []
+        self.print_predict=print_predict
 
     @abstractmethod
     def create_model(self):
@@ -64,9 +65,9 @@ class Model(ABC):
         print("Test loss:", score[0])
         print("Test accuracy:", score[1])
 
-    def compile(self, loss, optimizer, metrics):
+    def compile(self, loss, optimizer, metrics, run_eagerly=False):
         print("compiling model_efficientnet...")
-        self.model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
+        self.model.compile(loss=loss, optimizer=optimizer, metrics=metrics, run_eagerly=run_eagerly)
         print("done")
 
     def train(self, batch_size=128, epochs=15, **kwargs):
@@ -106,13 +107,14 @@ class Model(ABC):
         transform_X = self.dataset.parser.input_transformer(transform_X)
 
         prediction = self.dataset.parser.prediction_transform(self.model.predict(transform_X))
-        print("Prediction of input data:")
-        print(prediction)
-        if Y is not None:
-            print("Real output")
-            print(Y)
+        if self.print_predict:
+            print("Prediction of input data:")
+            print(prediction)
+            if Y is not None:
+                print("Real output")
+                print(Y)
 
-        self.prediction = prediction
+            self.prediction = prediction
 
     def __repr__(self):
         print(self.model.summary())

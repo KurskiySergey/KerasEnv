@@ -6,8 +6,8 @@ from parsers import Parser, TestParser, MnistParser, SDTestParser
 
 class Dataset:
     def __init__(self, filename: str = None, dir_name: str = None, per_for_test: int = 13, use_dataset=True, shuffle_data=False, batch_size=None):
-        self.test_data: list = []
-        self.train_data: list = []
+        self.test_data: list = [[], []]
+        self.train_data: list = [[], []]
         self.filename = filename
         self.dir_name = dir_name
         self.per_for_test = per_for_test
