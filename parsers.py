@@ -20,6 +20,10 @@ class Parser(ABC):
         pass
 
     @abstractmethod
+    def label_transform(self, label):
+        pass
+
+    @abstractmethod
     def input_transformer(self, data: np.ndarray) -> np.ndarray:
         pass
 

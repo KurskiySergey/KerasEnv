@@ -73,16 +73,19 @@ def generate_base_parser():
     data = f"class {ARGS.filename.title()}Parser(Parser):\n" \
            f"\tdef file_parse_func(self, filename: str, is_input=True) -> np.ndarray:\n\n" \
            f"\t\tif is_input:\n" \
-           f"\t\t\timage = Image.open(filename)\n" \
-           f"\t\t\tresult = self.file_data_transform(file=image)\n" \
+           f"\t\t\tresult = self.file_data_transform(filename)\n" \
            f"\t\t\tself.add_info['input_shape'] = result.shape\n" \
            f"\t\t\treturn result\n" \
            f"\t\telse:\n" \
-           f"\t\t\treturn np.asarray([0 if i != int(filename) else 1 for i in range(3)])\n\n" \
-           f"\tdef file_data_transform(self, file):\n" \
+           f"\t\t\treturn self.label_transform(filename)\n\n" \
+           f"\tdef file_data_transform(self, file):\n"\
+           f"\t\tfile = Image.open(file)\n"\
            f"\t\tfile = ImageOps.grayscale(file)\n" \
            f"\t\tresult = np.expand_dims(np.asarray(file), -1)\n" \
-           f"\t\treturn result\n\n" \
+           f"\t\treturn result\n\n"\
+           f"\tdef label_transform(self, label):\n"\
+           f"\t\tone_hot_label = np.asarray([0 if i != int(label) else 1 for i in range(3)])\n"\
+           f"\t\treturn one_hot_label\n\n"\
            f"\tdef input_transformer(self, data: np.ndarray) -> np.ndarray:\n" \
            f"\t\tmax_value = np.max(data)\n" \
            f"\t\treturn data / max_value\n\n" \
@@ -169,7 +172,7 @@ def generate_base_functions():
 
     get_data = "def get_predict_data():\n" \
                "\traw_info_dir = os.path.join(DATASETS_DIR, ARGS.dataset, 'raw_test')\n" \
-               "\tpred_data = [Image.open(os.path.join(raw_info_dir, filename)) " \
+               "\tpred_data = [os.path.join(raw_info_dir, filename) " \
                "for filename in os.listdir(raw_info_dir)]\n" \
                "\treal_data = ['Just test']\n" \
                "\treturn pred_data, real_data\n\n"

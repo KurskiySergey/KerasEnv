@@ -164,13 +164,26 @@ class Dataset:
     def get_val_data(self):
         return self.test_data
 
-    def test_train_generator(self, data, samples, bacth_size, one_use=False):
-        input_dt, output_dt = data
+    def generator_transform(self, data):
+        return {data[0]}, {data[1]}
+
+    def raw_generator(self, files_dir, is_input=True, one_use=False, use_batches=False):
+        files = sorted(os.listdir(files_dir))
         while True:
-            for index in range(samples):
-                in_dt = input_dt[index*bacth_size:(index+1)*bacth_size]
-                out_dt = output_dt[index*bacth_size:(index+1)*bacth_size]
-                yield in_dt, out_dt
+            if use_batches:
+                for index in range(len(files)):
+                    files_dt = files[index*self.batch_size:(index+1)*self.batch_size]
+                    in_data = []
+                    out_data = []
+                    for file in files_dt:
+                        input_dt, output_dt = self.parser.file_parse_func(file, is_input=is_input)
+                        in_data.append(input_dt)
+                        out_data.append(output_dt)
+                    yield self.generator_transform([np.asarray(in_data), np.asarray(out_data)])
+            else:
+                for file in files:
+                    result = self.parser.file_parse_func(file, is_input=is_input)
+                    yield self.generator_transform(result)
             if one_use:
                 break
 
