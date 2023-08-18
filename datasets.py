@@ -167,25 +167,51 @@ class Dataset:
     def generator_transform(self, data):
         return {data[0]}, {data[1]}
 
-    def raw_generator(self, files_dir, is_input=True, one_use=False, use_batches=False):
-        files = sorted(os.listdir(files_dir))
-        while True:
-            if use_batches:
-                for index in range(len(files)):
-                    files_dt = files[index*self.batch_size:(index+1)*self.batch_size]
-                    in_data = []
-                    out_data = []
-                    for file in files_dt:
-                        input_dt, output_dt = self.parser.file_parse_func(file, is_input=is_input)
-                        in_data.append(input_dt)
-                        out_data.append(output_dt)
-                    yield self.generator_transform([np.asarray(in_data), np.asarray(out_data)])
-            else:
-                for file in files:
-                    result = self.parser.file_parse_func(file, is_input=is_input)
-                    yield self.generator_transform(result)
-            if one_use:
-                break
+    def raw_generator(self, files_dir, is_input=True, one_use=False, use_batches=False, in_out_split = True):
+        if not in_out_split:
+            files = [os.path.join(files_dir, file) for file in sorted(os.listdir(files_dir))]
+            while True:
+                if use_batches:
+                    for index in range(len(files)):
+                        files_dt = files[index*self.batch_size:(index+1)*self.batch_size]
+                        in_data = []
+                        out_data = []
+                        for file in files_dt:
+                            input_dt, output_dt = self.parser.file_parse_func(file, is_input=is_input)
+                            in_data.append(input_dt)
+                            out_data.append(output_dt)
+                        yield self.generator_transform([np.asarray(in_data), np.asarray(out_data)])
+                else:
+                    for file in files:
+                        result = self.parser.file_parse_func(file, is_input=is_input)
+                        yield self.generator_transform(result)
+                if one_use:
+                    break
+        else:
+            in_dir = os.path.join(files_dir, "input")
+            out_dir = os.path.join(files_dir, "output")
+            in_files = [os.path.join(in_dir, file) for file in sorted(os.listdir(in_dir))]
+            out_files = [os.path.join(out_dir, file) for file in sorted(os.listdir(out_dir))]
+            while True:
+                if use_batches:
+                    for index in range(len(in_files)):
+                        in_files_dt = in_files[index*self.batch_size:(index+1)*self.batch_size]
+                        out_files_dt = out_files[index*self.batch_size:(index+1)*self.batch_size]
+                        in_data = []
+                        out_data = []
+                        for in_file, out_file in zip(in_files_dt, out_files_dt):
+                            input_dt = self.parser.file_parse_func(in_file, is_input=True)
+                            out_dt = self.parser.file_parse_func(out_file, is_input=False)
+                            in_data.append(input_dt)
+                            out_data.append(out_dt)
+                        yield self.generator_transform([np.asarray(in_data), np.asarray(out_data)])
+                else:
+                    for in_file, out_file in zip(in_files, out_files):
+                        in_dt = self.parser.file_parse_func(in_file, is_input=True)
+                        out_dt = self.parser.file_parse_func(out_file, is_input=False)
+                        yield self.generator_transform([in_dt, out_dt])
+                if one_use:
+                    break
 
 
 class TestDataset(Dataset):
