@@ -25,6 +25,8 @@ class Dataset:
                     self.__load_shuffled_data()
                 else:
                     self.__load_origin_data()
+            else:
+                self.__load_generator()
             self.__get_samples()
 
     def show_data(self, per_of_data: float = 10):
@@ -37,6 +39,12 @@ class Dataset:
 
     def set_parser(self, parser: Parser):
         self.parser = parser
+
+    def __load_generator(self):
+        train_dir = os.path.join(self.dir_name, "train")
+        test_dir = os.path.join(self.dir_name, "test")
+        self.train_data = [self.raw_generator(files_dir=train_dir, use_batches=True, one_use=False), None]
+        self.test_data = [self.raw_generator(files_dir=test_dir, use_batches=True, one_use=True), None]
 
     def __get_samples(self):
         if self.batch_size is not None:
