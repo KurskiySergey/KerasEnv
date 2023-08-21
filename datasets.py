@@ -25,9 +25,10 @@ class Dataset:
                     self.__load_shuffled_data()
                 else:
                     self.__load_origin_data()
+                self.__get_samples()
             else:
                 self.__load_generator()
-            self.__get_samples()
+
 
     def show_data(self, per_of_data: float = 10):
         print(f"train input/output length: {len(self.train_data[0])}")
