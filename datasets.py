@@ -2,6 +2,7 @@ import numpy as np
 import os
 import random
 from parsers import Parser, TestParser, MnistParser, SDTestParser
+import types
 
 
 class Dataset:
@@ -31,10 +32,13 @@ class Dataset:
 
 
     def show_data(self, per_of_data: float = 10):
-        print(f"train input/output length: {len(self.train_data[0])}")
-        print(f"test input/output length: {len(self.test_data[0])}")
-        print(f"train/test input shape: {self.train_data[0].shape}")
-        print(f"train/test output shape: {self.test_data[1].shape}")
+        if not isinstance(self.train_data[0], types.GeneratorType):
+            print(f"train input/output length: {len(self.train_data[0])}")
+            print(f"test input/output length: {len(self.test_data[0])}")
+            print(f"train/test input shape: {self.train_data[0].shape}")
+            print(f"train/test output shape: {self.test_data[1].shape}")
+        else:
+            print("input data is generator")
 
         self.parser.show_data(self.train_data, self.test_data, per_of_data=per_of_data)
 
@@ -174,7 +178,7 @@ class Dataset:
         return self.test_data
 
     def generator_transform(self, data):
-        return {data[0]}, {data[1]}
+        return data[0], data[1]
 
     def raw_generator(self, files_dir, is_input=True, one_use=False, use_batches=False, in_out_split = True):
         if not in_out_split:
