@@ -23,6 +23,9 @@ PARSER.add_argument('--callback', type=str, default='callback_model')
 PARSER.add_argument('--learning-rate', "-lr", type=float, default=0.001)
 PARSER.add_argument("--save-history", "-sh", action="store_true", default=False)
 PARSER.add_argument("--history", "-his", type=str, default="keras_model_history")
+PARSER.add_argument("--prepare-dataset", action="store_true", default=False)
+PARSER.add_argument("--show_model", action="store_true", default=False)
+PARSER.add_argument("--test-dataset", action="store_true", default=False)
 ARGS = PARSER.parse_args()
 
 

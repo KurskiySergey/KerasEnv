@@ -6,6 +6,7 @@ from random import randint
 PARSER = ArgumentParser("model generation")
 PARSER.add_argument("--filename", "-f", type=str, help="name of the file", default="keras_env_model")
 PARSER.add_argument("--dataset", "-d", type=str, help="name of te dataset", default="keras_env_dataset")
+PARSER.add_argument("--folder", action="store_true", default=False)
 ARGS = PARSER.parse_args()
 
 
@@ -30,7 +31,6 @@ def generate_dataset():
         os.chdir(BASE_DIR)
         generate_raw_test_simple_data(dataset_raw_dir=os.path.join(dataset_dir, "raw_test"))
 
-
 def generate_base_import():
     data = "import keras\n" \
            "from keras_import import *\n" \
@@ -42,6 +42,48 @@ def generate_base_import():
            "from PIL import Image, ImageOps\n\n"
 
     return data
+
+
+def generate_base_model_import():
+    data = "import keras\n" \
+           "from keras_import import *\n" \
+           "from keras_model import Model\n\n" \
+
+    return data
+
+def generate_base_dataset_import():
+    data = "from datasets import Dataset\n\n"
+
+    return data
+
+def generate_base_parser_import():
+    data = "from keras_import import *\n" \
+           "from parsers import Parser\n" \
+           "from PIL import Image, ImageOps\n\n"
+
+    return data
+
+def generate_base_folder_functions_import():
+    filename = ARGS.filename
+    data = ("import keras\n"
+            "from keras_import import *\n"
+            "from callbacks import KerasCallback\n"
+            "from config import DATASETS_DIR, KERAS_DIR\n"
+            f"from models.{filename.lower()}.{filename.title()}Dataset import {filename.title()}Dataset\n"
+            f"from models.{filename.lower()}.{filename.title()}Parser import {filename.title()}Parser\n"
+            f"from models.{filename.lower()}.{filename.title()}Model import {filename.title()}Model\n\n")
+
+    return "".join(data)
+
+def generate_base_run_import():
+
+    filename = ARGS.filename
+    data = (
+             "from keras_import import *\n"
+             "from config import DATASETS_DIR\n"
+             f"from models.{filename.lower()}.{filename.title()}BaseFunctions import prediction_test, test_model, train_model, prepare_dataset, show_model, test_dataset\n\n")
+
+    return "".join(data)
 
 
 def generate_base_model():
@@ -231,15 +273,18 @@ def generate_main_function():
 
 
 def generate_start_data():
-    start_data = "if __name__ == '__main__':\n" \
-                 "\tif ARGS.no_cuda:\n" \
-                 "\t\tuse_cpu()\n" \
-                 "\t# prepare_dataset()\n" \
-                 "\t# show_model()\n" \
-                 "\t# test_dataset()\n" \
-                 "\tmain()\n\n"
+    start_data = ("if __name__ == '__main__':\n"
+                  "\tif ARGS.no_cuda:\n"
+                  "\t\tuse_cpu()\n\n"
+                  "\tif ARGS.prepare_dataset:\n"
+                  "\t\tprepare_dataset()\n\n"
+                  "\tif ARGS.show_model:\n"
+                  "\t\tshow_model()\n\n"
+                  "\tif ARGS.test_dataset:\n"
+                  "\t\ttest_dataset()\n\n"
+                  "main()\n\n")
 
-    return start_data
+    return "".join(start_data)
 
 
 def generate_file():
@@ -260,9 +305,54 @@ def generate_file():
         file.write(file_data)
 
 
+def generate_file_folder():
+
+    filename = ARGS.filename.lower()
+    file_folder = os.path.join(MODELS_DIR, ARGS.filename.lower())
+
+    try:
+        os.mkdir(file_folder)
+        os.chdir(file_folder)
+
+        with open(f"{filename.title()}Model.py", "w") as model:
+            info = [generate_base_model_import(),
+                    generate_base_model()]
+            model.write("".join(info))
+
+        with open(f"{filename.title()}Parser.py", "w") as parser:
+            info = [generate_base_parser_import(),
+                    generate_base_parser()]
+            parser.write("".join(info))
+
+        with open(f"{filename.title()}Dataset.py", "w") as dataset:
+            info = [generate_base_dataset_import(),
+                    generate_base_dataset()]
+            dataset.write("".join(info))
+
+        with open(f"{filename.title()}BaseFunctions.py", "w") as base_func:
+            info = [generate_base_folder_functions_import(),
+                    generate_base_functions()]
+
+            base_func.write("".join(info))
+
+        with open(f"run.py", "w") as run:
+            info = [generate_base_run_import(),
+                    generate_main_function(),
+                    generate_start_data()]
+            run.write("".join(info))
+
+    except OSError:
+        print("model already exists")
+    finally:
+        os.chdir(BASE_DIR)
+
+
 def main():
     generate_dataset()
-    generate_file()
+    if ARGS.folder:
+        generate_file_folder()
+    else:
+        generate_file()
 
 
 if __name__ == "__main__":
