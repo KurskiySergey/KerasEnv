@@ -282,7 +282,7 @@ def generate_start_data():
                   "\t\tshow_model()\n\n"
                   "\tif ARGS.test_dataset:\n"
                   "\t\ttest_dataset()\n\n"
-                  "main()\n\n")
+                  "\tmain()\n\n")
 
     return "".join(start_data)
 
