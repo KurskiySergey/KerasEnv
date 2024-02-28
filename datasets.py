@@ -205,11 +205,11 @@ class Dataset:
                             input_dt, output_dt = self.parser.file_parse_func(file, is_input=is_input)
                             in_data.append(input_dt)
                             out_data.append(output_dt)
-                        yield self.generator_transform([np.asarray(in_data), np.asarray(out_data)])
+                        yield self.parser.generator_transform([np.asarray(in_data), np.asarray(out_data)])
                 else:
                     for file in files:
                         result = self.parser.file_parse_func(file, is_input=is_input)
-                        yield self.generator_transform(result)
+                        yield self.parser.generator_transform(result)
                 if one_use:
                     break
         else:
@@ -235,12 +235,12 @@ class Dataset:
                             in_data.append(input_dt)
                             out_data.append(out_dt)
                         # print(np.asarray(in_data).shape, index)
-                        yield self.generator_transform([np.asarray(in_data), np.asarray(out_data)])
+                        yield self.parser.generator_transform([np.asarray(in_data), np.asarray(out_data)])
                 else:
                     for in_file, out_file in zip(in_files, out_files):
                         in_dt = self.parser.file_parse_func(in_file, is_input=True)
                         out_dt = self.parser.file_parse_func(out_file, is_input=False)
-                        yield self.generator_transform([in_dt, out_dt])
+                        yield self.parser.generator_transform([in_dt, out_dt])
                 if one_use:
                     break
 
