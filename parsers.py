@@ -43,6 +43,9 @@ class Parser(ABC):
     def prediction_transform(self, X):
         pass
 
+    def generator_transform(self, data):
+        return np.asarray([self.input_transformer(data[0]), self.output_transformer(data[1])])
+
 
 class TestParser(Parser):
 
