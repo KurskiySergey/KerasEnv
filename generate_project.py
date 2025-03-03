@@ -197,7 +197,10 @@ def generate_base_functions():
                  f"\t\tmodel.load_model(model_name=os.path.join(KERAS_DIR, ARGS.model))\n\n" \
                  f"\tbatch_size = ARGS.batch_size\n" \
                  f"\tepochs = ARGS.epochs\n\n" \
-                 f"\tmodel.train(batch_size=batch_size, epochs=epochs, no_callback=ARGS.no_callback)\n" \
+                 f"\tsteps_per_epoch = len(os.listdir(os.path.join(DATASETS_DIR, ARGS.dataset, 'input'))) // batch_size\n" \
+                 f"\tvalidation_data = None\n" \
+                 f"\tvalidation_steps = None\n" \
+                 f"\tmodel.train(batch_size=batch_size, epochs=epochs, no_callback=ARGS.no_callback, steps_per_epoch=steps_per_epoch, validation_data=validation_data, validation_steps=validation_steps)\n" \
                  f"\tmodel.test()\n\n" \
                  f"\tif ARGS.save_model:\n" \
                  f"\t\tmodel.save_model(os.path.join(KERAS_DIR, ARGS.filename))\n" \
