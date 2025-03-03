@@ -26,8 +26,8 @@ class Model(ABC):
     def save_prediction(self):
         pass
 
-    def load_dataset(self, fit_generator=False, use_batches=True):
-        self.dataset.load_dataset(fit_generator=fit_generator, use_batches=use_batches)
+    def load_dataset(self, fit_generator=False, use_batches=True, split_generator=False):
+        self.dataset.load_dataset(fit_generator=fit_generator, use_batches=use_batches, split_generator=split_generator)
         self.testX, self.testY = self.dataset.get_test_data()
         self.trainX, self.trainY = self.dataset.get_train_data()
         self.valX, self.valY = self.dataset.get_val_data()

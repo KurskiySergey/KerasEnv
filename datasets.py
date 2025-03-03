@@ -20,7 +20,7 @@ class Dataset:
         self.train_samples = 0
         self.test_samples = 0
 
-    def load_dataset(self, fit_generator=False, use_batches=True):
+    def load_dataset(self, fit_generator=False, use_batches=True, split_generator=True):
         if self.use_dataset:
             if not fit_generator:
                 if self.shuffle_data:
@@ -30,7 +30,7 @@ class Dataset:
                 self.__get_samples()
             else:
                 self.use_batches = use_batches
-                self.__load_generator()
+                self.__load_generator(split_generator)
 
 
     def show_data(self, per_of_data: float = 10):
@@ -47,7 +47,7 @@ class Dataset:
     def set_parser(self, parser: Parser):
         self.parser = parser
 
-    def __load_generator(self):
+    def __load_generator(self, split_generator=True):
         files_dir = os.path.join(self.dir_name, "input")
         out_files_dir = os.path.join(self.dir_name, "output")
         if len(os.listdir(files_dir)) == 0:
@@ -58,9 +58,13 @@ class Dataset:
         else:
             in_data = sorted(os.listdir(files_dir))
             out_data = sorted(os.listdir(out_files_dir))
-            test_data, train_data = self.__shuffle_data(in_data, out_data)
-            self.train_data = [self.raw_generator(files_dir=self.dir_name, files=train_data, use_batches=self.use_batches, one_use=False, in_out_split=True), None]
-            self.test_data = [self.raw_generator(files_dir=self.dir_name, files=test_data, use_batches=self.use_batches, one_use=True, in_out_split=True), None]
+            if split_generator:
+                test_data, train_data = self.__shuffle_data(in_data, out_data)
+                self.train_data = [self.raw_generator(files_dir=files_dir, files=train_data, use_batches=self.use_batches, one_use=False, in_out_split=True), None]
+                self.test_data = [self.raw_generator(files_dir=out_data, files=test_data, use_batches=self.use_batches, one_use=True, in_out_split=True), None]
+            else:
+                self.train_data = [self.raw_generator(files_dir=files_dir, files=None, use_batches=self.use_batches, one_use=False, in_out_split=False), None]
+                self.test_data = [self.raw_generator(files_dir=files_dir, files=None, use_batches=self.use_batches, one_use=True, in_out_split=False), None]
 
 
     def __get_samples(self):
@@ -197,7 +201,7 @@ class Dataset:
             files = [os.path.join(files_dir, file) for file in sorted(os.listdir(files_dir))]
             while True:
                 if use_batches:
-                    for index in range(len(files)):
+                    for index in range(len(files) // self.batch_size):
                         files_dt = files[index*self.batch_size:(index+1)*self.batch_size]
                         in_data = []
                         out_data = []
@@ -205,13 +209,14 @@ class Dataset:
                             input_dt, output_dt = self.parser.file_parse_func(file, is_input=is_input)
                             in_data.append(input_dt)
                             out_data.append(output_dt)
-                        yield self.parser.generator_transform([np.asarray(in_data), np.asarray(out_data)])
+                        yield self.parser.generator_transform([in_data, out_data])
                 else:
                     for file in files:
                         result = self.parser.file_parse_func(file, is_input=is_input)
                         yield self.parser.generator_transform(result)
                 if one_use:
                     break
+
         else:
             in_dir = os.path.join(files_dir, "input")
             out_dir = os.path.join(files_dir, "output")
