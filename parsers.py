@@ -44,7 +44,7 @@ class Parser(ABC):
         pass
 
     def generator_transform(self, data):
-        return np.asarray([self.input_transformer(data[0]), self.output_transformer(data[1])])
+        return self.input_transformer(data[0]), self.output_transformer(data[1])
 
 
 class TestParser(Parser):
